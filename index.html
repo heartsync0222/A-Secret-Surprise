@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Secret Surprise</title>
+    <link rel="stylesheet" href="style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="scene">
+        <!-- Background Particles Container -->
+        <div class="particles" id="particles"></div>
+
+        <!-- Music Control -->
+        <div class="music-control hidden" id="music-control">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" />
+            </svg>
+        </div>
+
+        <!-- Audio Element -->
+        <audio id="bg-music" loop>
+            <source
+                src="https://cdn.pixabay.com/download/audio/2022/10/25/audio_1063859663.mp3?filename=romantic-piano-124976.mp3"
+                type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+
+        <!-- Phase 1: The Letter -->
+        <div class="envelope-container" id="envelope-container">
+            <div class="envelope" id="envelope">
+                <div class="flap"></div>
+                <div class="pocket"></div>
+                <div class="letter" id="letter">
+                    <div class="letter-content">
+                        <p id="typewriter-text"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="instruction-text" id="instruction-text">Click to open</div>
+        </div>
+
+        <!-- Phase 2: The Locket -->
+        <div class="locket-container hidden" id="locket-container">
+            <!-- SVG Chain for realistic curve -->
+            <svg class="chain-svg" viewBox="0 0 100 300" preserveAspectRatio="none">
+                <path d="M50 0 Q50 150 50 300" stroke="url(#chainGradient)" stroke-width="4" fill="none"
+                    class="chain-path" />
+                <defs>
+                    <linearGradient id="chainGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:#d4af37;stop-opacity:1" />
+                        <stop offset="50%" style="stop-color:#f9d970;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#b8860b;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+            </svg>
+
+            <!-- Top Message -->
+            <div class="top-message hidden" id="top-message">Love you my angry bird 😘</div>
+
+            <div class="locket" id="locket">
+                <div class="locket-front">
+                    <!-- Heart shape handled by CSS -->
+                    <div class="heart-shape"></div>
+                    <div class="keyhole"></div>
+                </div>
+                <div class="locket-back">
+                    <div class="photo-frame left">
+                        <div class="text-content">
+                            <p>Happy<br>Valentine<br>My Love</p>
+                        </div>
+                    </div>
+                    <div class="photo-frame right">
+                        <img src="us.jpg" alt="My Love">
+                    </div>
+                </div>
+            </div>
+            <div class="final-message hidden" id="final-message">
+                <p>Forever yours ❤️</p>
+                <p class="sub">My Angry Bird 🐦</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

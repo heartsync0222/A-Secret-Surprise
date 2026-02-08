@@ -1,0 +1,613 @@
+/* Google Fonts Import found in HTML head */
+
+:root {
+    --bg-color: #fcfbf9;
+    --gold: #d4af37;
+    --gold-shine: #f9d970;
+    --heart-red: #cc2b5e;
+    --text-color: #4a4a4a;
+    --handwriting-font: 'Dancing Script', cursive;
+    --body-font: 'Playfair Display', serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: radial-gradient(circle at center, #fffdf5 0%, #ffeacc 40%, #ffd1a9 100%);
+    font-family: var(--body-font);
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-color);
+    perspective: 1000px;
+    /* Essential for 3D effects */
+}
+
+/* Background Particles */
+.particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.particle {
+    position: absolute;
+    background: radial-gradient(circle, var(--gold-shine) 0%, rgba(255, 255, 255, 0) 70%);
+    border-radius: 50%;
+    opacity: 0;
+    animation: floatUp 8s linear infinite;
+}
+
+@keyframes floatUp {
+    0% {
+        transform: translateY(100vh) scale(0);
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 0.8;
+    }
+
+    80% {
+        opacity: 0.6;
+    }
+
+    100% {
+        transform: translateY(-10vh) scale(1);
+        opacity: 0;
+    }
+}
+
+/* Music Control */
+.music-control {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
+    cursor: pointer;
+    color: var(--gold);
+    opacity: 0.7;
+    transition: opacity 0.3s;
+}
+
+.music-control:hover {
+    opacity: 1;
+}
+
+.music-control.hidden {
+    display: none;
+}
+
+/* ================= Envelope ================= */
+.envelope-container {
+    position: relative;
+    width: 300px;
+    height: 200px;
+    z-index: 10;
+    transition: all 1.5s ease-in-out;
+    cursor: pointer;
+}
+
+.envelope-container.blurred {
+    opacity: 0;
+    transform: scale(1.5) translateY(-50px);
+    pointer-events: none;
+    filter: blur(10px);
+}
+
+.envelope {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: #f0e6d2;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transform-style: preserve-3d;
+    /* Paper Texture effect */
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.1'/%3E%3C/svg%3E");
+}
+
+.envelope::before {
+    /* Envelope Flap Triangle (Bottom part) */
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 150px solid transparent;
+    border-right: 150px solid transparent;
+    border-bottom: 200px solid #e6dabf;
+    /* Slightly darker */
+    z-index: 3;
+}
+
+.envelope::after {
+    /* Envelope Sides */
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 150px solid #eaddcf;
+    border-top: 100px solid transparent;
+    border-bottom: 100px solid transparent;
+    z-index: 3;
+}
+
+.envelope .pocket {
+    /* Right Side */
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+    border-right: 150px solid #eaddcf;
+    border-top: 100px solid transparent;
+    border-bottom: 100px solid transparent;
+    z-index: 3;
+}
+
+.flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 150px solid transparent;
+    border-right: 150px solid transparent;
+    border-top: 110px solid #dfcfb0;
+    /* Darkest for flap */
+    z-index: 4;
+    transform-origin: top;
+    transition: transform 1s ease-in-out 0.2s, z-index 0.2s;
+}
+
+.envelope.open .flap {
+    transform: rotateX(180deg);
+    z-index: 1;
+}
+
+.letter {
+    position: absolute;
+    top: 10px;
+    left: 15px;
+    width: 270px;
+    height: 180px;
+    background: #fffdf7;
+    z-index: 2;
+    /* behind sides/flap initially */
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    transition: transform 1s ease-in-out 0.8s, height 1s ease-in-out 0.8s, top 1s ease-in-out 0.8s;
+    overflow: hidden;
+    font-family: var(--handwriting-font);
+    font-size: 1.2rem;
+    line-height: 1.5;
+    color: #555;
+    text-align: center;
+    /* Paper texture for letter */
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+}
+
+.envelope.open .letter {
+    transform: translateY(-80px);
+    height: 300px;
+    /* Expands */
+    z-index: 5;
+    /* Comes to front */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.instruction-text {
+    position: absolute;
+    bottom: -40px;
+    width: 100%;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #999;
+    letter-spacing: 1px;
+    animation: fadeInOut 2s infinite;
+}
+
+.instruction-text.hidden {
+    display: none;
+}
+
+@keyframes fadeInOut {
+
+    0%,
+    100% {
+        opacity: 0.5;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+
+/* ================= Locket ================= */
+/* ================= Locket ================= */
+.locket-container {
+    position: absolute;
+    top: -400px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 20;
+    transition: top 2s cubic-bezier(0.175, 0.885, 0.32, 1.275), transform 2s ease-in-out;
+    transform-origin: center 360px;
+    /* Pivot near the locket center (Chain 300px + Locket center ~60px) */
+}
+
+.locket-container.drop {
+    top: 10%;
+}
+
+/* Zoom Effect */
+.locket-container.zoomed {
+    top: 50%;
+    /* Move connection point down to center screen */
+    transform: translateX(-50%) translateY(-50%) scale(3);
+    /* Scale up */
+    z-index: 50;
+}
+
+/* SVG Chain */
+.chain-svg {
+    width: 100px;
+    height: 300px;
+    margin-bottom: -15px;
+    filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.3));
+    transform-origin: top center;
+    animation: swing 3s ease-in-out infinite alternate;
+}
+
+@keyframes swing {
+    from {
+        transform: rotate(-2deg);
+    }
+
+    to {
+        transform: rotate(2deg);
+    }
+}
+
+.locket {
+    position: relative;
+    width: 120px;
+    height: 110px;
+    perspective: 800px;
+    cursor: pointer;
+    transition: transform 0.5s;
+    filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.3));
+}
+
+.locket:hover {
+    transform: scale(1.05);
+}
+
+.locket-container.zoomed .locket:hover {
+    transform: none;
+}
+
+/* Realistic Metallic Locket */
+.heart-shape {
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    width: 100px;
+    height: 100px;
+    background: transparent;
+    transition: all 0.5s;
+}
+
+.heart-shape::before,
+.heart-shape::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 52px;
+    height: 80px;
+    border-radius: 50px 50px 0 0;
+    /* Realistic Gold Gradient */
+    background: radial-gradient(circle at 30% 30%, #fffbe8, #e6c66d, #b8860b, #694f08);
+    transform: rotate(-45deg);
+    transform-origin: 0 100%;
+    border: 1px solid #916a08;
+    box-shadow: inset -2px -2px 10px rgba(0, 0, 0, 0.4), inset 2px 2px 10px rgba(255, 255, 255, 0.4);
+}
+
+.heart-shape::before {
+    left: 50px;
+}
+
+.heart-shape::after {
+    left: 0;
+    transform: rotate(45deg);
+    transform-origin: 100% 100%;
+    border-left: none;
+}
+
+/* Keyhole / Detail */
+.keyhole {
+    position: absolute;
+    top: 40px;
+    left: 55px;
+    width: 10px;
+    height: 15px;
+    background: #4a3b10;
+    border-radius: 5px 5px 2px 2px;
+    box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.5);
+    z-index: 5;
+    opacity: 0.8;
+}
+
+/* Locket Interior */
+.locket-front {
+    z-index: 2;
+    transform-style: preserve-3d;
+    transition: transform 0.8s, opacity 0.5s 0.3s;
+    /* Add opacity transition */
+}
+
+.locket.open .locket-front {
+    transform: rotateY(-135deg);
+    opacity: 0;
+    /* Hide the gold cover when open */
+    pointer-events: none;
+}
+
+/* Inside of locket */
+.locket-back {
+    z-index: 1;
+    transform: rotateY(0deg);
+    background: transparent;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 210px;
+    /* Adjusted width */
+    left: -45px;
+    /* Re-centered */
+    position: absolute;
+    top: 5px;
+    opacity: 0;
+    transition: opacity 0.5s 0.2s;
+    pointer-events: none;
+    /* Let clicks pass through to locket container if needed */
+}
+
+.locket.open .locket-back {
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 10;
+    /* Bring to front */
+}
+
+.photo-frame {
+    width: 100px;
+    height: 90px;
+    background: #fff;
+    margin: 0 2px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
+    /* Even wider clip path to show more image/text */
+    clip-path: path("M50 90 L5 35 A24 24 0 0 1 50 10 A24 24 0 0 1 95 35 Z");
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.text-content {
+    font-family: 'Great Vibes', cursive;
+    font-size: 13.5px;
+    text-align: center;
+    color: #cc2b5e;
+    line-height: 1.1;
+    width: 100%;
+    padding-top: 0;
+    /* Removed padding */
+    margin-top: -8px;
+    /* Move up slightly */
+}
+
+.text-content p {
+    margin: 0;
+}
+
+.photo-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.0);
+    padding-top: 0;
+    /* Removed padding */
+    margin-top: -20px;
+    /* No zoom on image itself to prevent cutting */
+}
+
+/* Final text */
+.top-message {
+    position: absolute;
+    top: 240px;
+    /* Lowered slightly to be closer to locket (Chain is 300px) */
+    width: 300px;
+    /* Fixed width matching container */
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    text-align: center;
+    font-family: var(--handwriting-font);
+    font-size: 1.5rem;
+    color: var(--heart-red);
+    opacity: 0;
+    transition: all 1s ease-out 0.5s;
+    text-shadow: 0 2px 5px rgba(255, 100, 100, 0.3);
+    pointer-events: none;
+    z-index: 100;
+    /* Max z-index */
+    display: none;
+    /* Default hidden */
+}
+
+/* Allow JS to handle display, but if visible class is there, show it */
+.top-message.visible {
+    opacity: 1;
+    display: block;
+    transform: translateX(-50%) translateY(0);
+}
+
+.locket-container.zoomed .top-message.visible {
+    /* Counter-scale */
+    transform: translateX(-50%) translateY(0) scale(0.4);
+}
+
+/* Mobile adjustment for top message */
+@media (max-width: 768px) {
+    .top-message {
+        width: 100%;
+        /* Full width on mobile */
+    }
+
+    .locket-container.zoomed .top-message.visible {
+        transform: translateX(-50%) translateY(0) scale(0.5);
+        top: 220px;
+    }
+}
+
+.final-message {
+    margin-top: 250px;
+    /* Pushed further down due to zoom/scale layout */
+    text-align: center;
+    font-family: var(--handwriting-font);
+    font-size: 2rem;
+    color: var(--heart-red);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 1s ease-out 0.5s;
+    text-shadow: 0 2px 5px rgba(255, 100, 100, 0.3);
+    pointer-events: none;
+    /* Let clicks pass through if needed */
+}
+
+/* When zoomed, we might want to hide it or keep it visible? 
+   User logic implies "Forever Yours" shows up. 
+   If zoomed, it might be off screen. 
+   Let's adjust position.
+*/
+.locket-container.zoomed .final-message {
+    margin-top: 40px;
+    /* Bring closer */
+    transform: scale(0.3);
+    /* Counteract zoom so text isn't huge? 
+       Actually, if container is scaled 3.5x, text will be huge.
+       Let's keep text outside container? No, it's inside.
+       Let's make text smaller.
+    */
+    font-size: 0.8rem;
+    /* effective size approx 2.8rem */
+}
+
+.final-message.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.locket-container.zoomed .final-message.visible {
+    transform: scale(0.3) translateY(0);
+}
+
+
+.final-message .sub {
+    font-size: 1.2rem;
+    color: #888;
+    margin-top: 5px;
+}
+
+.locket-container.zoomed .final-message .sub {
+    font-size: 0.5rem;
+}
+
+/* Animations */
+@keyframes heartbeat {
+    0% {
+        transform: scale(1);
+    }
+
+    15% {
+        transform: scale(1.1);
+    }
+
+    30% {
+        transform: scale(1);
+    }
+
+    45% {
+        transform: scale(1.1);
+    }
+
+    60% {
+        transform: scale(1);
+    }
+}
+
+.pulse {
+    animation: heartbeat 2s infinite;
+}
+
+/* Utility to hide */
+.hidden {
+    display: none;
+    opacity: 0;
+}
+
+/* ================= Mobile Optimization ================= */
+@media (max-width: 768px) {
+    .locket-container.zoomed {
+        transform: translateX(-50%) translateY(-50%) scale(2.6);
+        /* Smaller zoom for mobile to fit width */
+    }
+
+    .locket-container.zoomed .final-message {
+        margin-top: 50px;
+        /* Adjust spacing for mobile */
+        transform: scale(0.35);
+        /* Slightly larger relative text for readability */
+    }
+
+    .envelope-container {
+        transform: scale(0.8);
+        /* Smaller envelope on start */
+    }
+
+    /* Mobile Text Fit - Specific Override */
+    .text-content {
+        font-size: 11.5px;
+        /* Even smaller font only on mobile */
+        margin-top: -8px;
+        line-height: 1.0;
+    }
+
+    /* Mobile Image Fit */
+    .photo-frame img {
+        transform: scale(1.0);
+        /* Ensure no zoom on mobile */
+        margin-top: -15px;
+        /* Adjust image position for mobile */
+    }
+}
